@@ -1,7 +1,7 @@
 """Downloads CloudWatch metrics (1-minute granularity) for every run under results/raw/.
 
-For each results/raw/<run>/run.json, writes results/raw/<run>/cloudwatch.json and,
-for the Event Functions, cold_starts.json from the REPORT lines with Init Duration.
+For each results/raw/<run>/run.json, writes results/raw/<run>/cloudwatch.json and
+cold_starts.json (Event Functions: REPORT lines with Init Duration; Web Function: platform.initReport).
 
 Usage: python scripts/pull_metrics.py results/raw [--force]
 """
@@ -109,13 +109,21 @@ def fetch(cw, specs, start, end):
     return out
 
 
-def cold_starts(logs, fn, start, end):
-    query = (
-        "filter @type = 'REPORT' and ispresent(@initDuration) "
-        "| stats count() as cold_starts, avg(@initDuration) as avg_init_ms, max(@initDuration) as max_init_ms"
-    )
+EVENT_COLD_STARTS = (
+    "filter @type = 'REPORT' and ispresent(@initDuration) "
+    "| stats count() as cold_starts, avg(@initDuration) as avg_init_ms, max(@initDuration) as max_init_ms"
+)
+# Web Functions log one platform.initReport per new environment (seen in the CLI spike).
+WEB_COLD_STARTS = (
+    "filter type = 'platform.initReport' "
+    "| stats count() as cold_starts, avg(record.metrics.totalDurationMs) as avg_init_ms, "
+    "max(record.metrics.totalDurationMs) as max_init_ms"
+)
+
+
+def cold_starts(logs, log_group, query, start, end):
     qid = logs.start_query(
-        logGroupName=f"/aws/lambda/{fn}",
+        logGroupName=log_group,
         startTime=int(start.timestamp()),
         endTime=int(end.timestamp()),
         queryString=query,
@@ -158,10 +166,13 @@ def main():
                 "metrics": fetch(cw, specs, start, end)}
         (out_dir / "cloudwatch.json").write_text(json.dumps(data, indent=1))
 
+        # Exact run window: the padded one would overlap the next run on the same function.
         if variant in EVENT_FUNCTIONS:
-            # Exact run window: the padded one would overlap the next run on the same function.
-            cs = cold_starts(logs, EVENT_FUNCTIONS[variant], parse(run["start"]), parse(run["end"]))
-            (out_dir / "cold_starts.json").write_text(json.dumps(cs, indent=1))
+            log_group, query = f"/aws/lambda/{EVENT_FUNCTIONS[variant]}", EVENT_COLD_STARTS
+        else:
+            log_group, query = f"/aws/lambda/web/{WEB_FUNCTION}", WEB_COLD_STARTS
+        cs = cold_starts(logs, log_group, query, parse(run["start"]), parse(run["end"]))
+        (out_dir / "cold_starts.json").write_text(json.dumps(cs, indent=1))
         print(f"{run['run']}: {len(data['metrics'])} series")
 
 

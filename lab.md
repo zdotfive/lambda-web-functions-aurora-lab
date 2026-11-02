@@ -264,3 +264,26 @@ Fonte primaria: AWS Pricing API (`aws pricing get-products --region us-east-1`),
 
 - `aws lambda get-account-settings`: `ConcurrentExecutions = 1000`, `UnreservedConcurrentExecutions = 1000`. La richiesta a 1.100 risulta ancora `CASE_OPENED` (ultimo aggiornamento 31/10 10:50), ma il limite effettivo è già passato da 10 a 1.000.
 - Con 1.000 non si possono riservare 500 + 500 (AWS tiene sempre 100 non riservate): massimo 450 + 450.
+
+## 2026-11-02 — Bootstrap, budget, spike CLI (§4.1)
+
+- Budget `lwf-lab-20usd` creato (mensile, 20 USD, avvisi ACTUAL > 50% e > 100% a zdotfive@gmail.com).
+- `cdk bootstrap aws://<account>/eu-west-1` ok (stack `CDKToolkit`, con tag project=lwf-lab). Resta dopo il lab: non è nella lista di `leftovers.sh`.
+- Spike con la CLI, senza VPC, funzione `lwf-spike`, app `node:http` senza dipendenze in `web/spike.mjs`. Tutto cancellato alle 14:37 UTC.
+  1. **`create-web-function` senza `--revision-config` e `--endpoint-config` fallisce**: "The revisionConfig and endpointConfig must be specified." La CLI li mostra come opzionali. La funzione nasce insieme alla prima revisione e al primo endpoint.
+     In CloudFormation invece `AWS::Lambda::WebFunction` ha solo `FunctionName`: da vedere al deploy come lo gestisce.
+  2. Tempi: `create-web-function` risponde in 2 s con funzione Active e revisione/endpoint Pending; revisione Active dopo circa 15 s, endpoint Active subito dopo (waiter `web-function-revision-active` / `web-function-endpoint-active`).
+  3. **DNS**: il primo `curl` subito dopo la creazione ha avuto "Could not resolve host"; il resolver di macOS ha tenuto in cache la risposta negativa anche dopo che `dig` risolveva (CNAME su `c300.eu-west-1.prod.frontend.lambda-lite.aws.dev`). Workaround: `curl --resolve host:443:<ip da dig>`.
+  4. `AWS_LAMBDA_HTTP_ENDPOINT = 0.0.0.0:3000`. `AWS_LAMBDA_NODEJS_ENTRYPOINT=web/spike.mjs` (`.mjs` in sottocartella) funziona.
+  5. Ambiente: Node `v24.22.1`, `arm64`, `os.cpus()` = 2, `os.totalmem()` = 2402 MB, `AWS_LAMBDA_FUNCTION_MEMORY_SIZE=2048`, `AWS_LAMBDA_INITIALIZATION_TYPE=native-http`, `pid` = 2.
+     Non c'è `AWS_LAMBDA_FUNCTION_NAME`. Le credenziali del ruolo arrivano come env var (`AWS_ACCESS_KEY_ID`, ...), come nelle Event Functions.
+  6. Header aggiunti alla richiesta: `lambda-web-endpoint-name`, `lambda-web-request-id`, `x-forwarded-for/port/proto`. Header di risposta: `lambda-web-logstream: <data>/<fn>[<rev>]<id>` (uno per ambiente) e `lambda-web-request-id`.
+  7. Auth `ApplicationManaged`: senza token l'app risponde 401 (la piattaforma non filtra nulla). Latenza dal portatile (Italia) circa 0,27 s a caldo.
+  8. **Concorrenza per ambiente che parte bassa**: endpoint con `maxEnvironments=2`, 40 richieste parallele con 1 s di attesa:
+     giri 1-5: 4 x 200 e 36 x 429 (`lambda-web-error-type: Platform.EndpointMaxEnvThrottle`), 2 richieste contemporanee per ambiente;
+     giro 6: un ambiente sale a 8; giri 7-11: 8 + 8 (16 x 200, 24 x 429); giro 12: uno sale a 20; giri 13-14: 20 + 20, 40 x 200.
+     Crescita a gradini 2 → 8 → 20 in circa 15 secondi di traffico. Con un tetto `maxEnvironments` stretto, una funzione nuova rifiuta quasi tutto finché non ha "imparato". Il run di riscaldamento prima della matrice serve.
+  9. Log: i log group `/aws/lambda/web/<fn>` e `.local` vengono creati automaticamente senza retention. Eventi `platform.initStart`, `platform.initReport` (con `totalDurationMs`, 257 ms nel primo init, e `instanceId`), `platform.invokeStart`.
+     I cold start della Web Function si contano da `platform.initReport`.
+  10. Metriche comparse dopo pochi minuti: `AWS/Lambda/Web` `ExecutedRequests`, `HTTPResponseStatusClass4XX` (FunctionName, EndpointName); `AWS/Lambda/Web/Usage` `EndpointActiveEnvironments`, `EndpointActiveEnvironmentThrottles`, `ExecutedRequests` (FunctionName, EndpointName, ExecutionRegion).
+  11. `delete-web-function` cancella anche revisioni ed endpoint (stato Deleting, waiter `web-function-deleted` in circa 8 s).

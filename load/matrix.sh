@@ -28,7 +28,16 @@ minutes=${DURATION%m}
 total=$((runs * minutes + (runs - 1) * PAUSE / 60))
 echo "runs: $runs x $DURATION, pause ${PAUSE}s -> about ${total} min"
 
+echo "plus one warm-up run per variant (200 VUs, delay 100, 2m), discarded"
+
 [[ "${1:-}" == "--run" ]] || exit 0
+
+# A new Web Function starts with low concurrency per environment and raises it as it sees traffic
+# (2 -> 8 -> 20 in the CLI spike). Every variant gets the same warm-up so none starts cold.
+for v in "${VARIANTS[@]}"; do
+  scripts/run_one.sh "$v" "$(url_for "$v")" 200 100 2m constant warmup
+  sleep "$PAUSE"
+done
 
 for d in "${DELAYS[@]}"; do for v in "${VARIANTS[@]}"; do for l in "${LEVELS[@]}"; do
   scripts/run_one.sh "$v" "$(url_for "$v")" "$l" "$d" "$DURATION"
