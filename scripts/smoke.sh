@@ -2,7 +2,7 @@
 # The three variants must return the same JSON for the same id (apart from variant and envId).
 set -euo pipefail
 cd "$(dirname "$0")/.."
-source .env
+set -a; source .env; set +a
 
 tmp=$(mktemp -d)
 trap 'rm -rf "$tmp"' EXIT

@@ -5,7 +5,7 @@
 # Usage: scripts/sample_pg.sh <out.csv>   (DB_URL from .env, points at the writer, not the proxy)
 set -uo pipefail
 cd "$(dirname "$0")/.."
-source .env
+set -a; source .env; set +a
 
 out=$1
 echo "ts,application_name,usename,client_addr,state,count" > "$out"

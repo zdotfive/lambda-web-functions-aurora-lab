@@ -308,3 +308,6 @@ Fonte primaria: AWS Pricing API (`aws pricing get-products --region us-east-1`),
 - **Matrice bloccata (16:14-16:32 UTC).** Dal primo run di riscaldamento l'agente SSM è andato in `ConnectionLost` e il traffico del loadgen è crollato (da circa 300.000 a 2.000 pacchetti ogni 5 minuti), con k6 al 50% di CPU.
   Causa: in `run.js` l'URL contiene l'id del cliente, quindi k6 crea una serie di metriche per ogni URL (warning: 200.395 → 401.572 → 805.141 → 1.603.144 serie). Memoria esaurita sulla `c7g.large` (4 GB).
   Fix: `tags: { name: 'GET /customer/:id' }` sulla richiesta. Istanza riavviata alle 16:33 UTC (lo shutdown programmato si perde con il reboot: rimesso alle 20:30 UTC). Il run interrotto è scartato.
+- **Probe di 30 s su web-pool (16:39 UTC) tutto 401**: `run_one.sh` faceva `source .env` senza esportare, quindi k6 non vedeva `LAB_TOKEN`. Anche il riscaldamento interrotto era fatto solo di 401 (lo smoke passava perché usa `curl` dalla shell). Fix: `set -a; source .env; set +a`.
+  Effetto collaterale utile: 200 VU senza attese generano 12.917 req/s di 401; la Web Function risponde con 429 `Platform.AccountRequestThrottle` (93.354), `EndpointRequestThrottle` (8.752), `EndpointMaxEnvThrottle` (6.497) e 26.349 x 503.
+  Il limite di account `maxTotalRateLimit` di 10.000 RPS si vede davvero. Questo probe non è un risultato del confronto (solo 401).

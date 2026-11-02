@@ -3,7 +3,7 @@
 # Variants run one after the other, never in parallel. Needs the URLs in .env on the loadgen.
 set -euo pipefail
 cd "$(dirname "$0")/.."
-source .env
+set -a; source .env; set +a
 
 VARIANTS=(event-direct event-proxy web-pool)
 DELAYS=(0 100)

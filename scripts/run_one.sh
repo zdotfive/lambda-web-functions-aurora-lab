@@ -3,7 +3,7 @@
 # Usage: scripts/run_one.sh <variant> <url> <vus> <delay_ms> <duration> [mode] [label]
 set -euo pipefail
 cd "$(dirname "$0")/.."
-source .env
+set -a; source .env; set +a
 
 variant=$1 url=$2 vus=$3 delay=$4 duration=$5 mode=${6:-constant} label=${7:-}
 run="$(date -u +%Y%m%dT%H%M%SZ)_${variant}_d${delay}_v${vus}${label:+_$label}"
@@ -16,7 +16,7 @@ sampler=$!
 trap 'kill $sampler 2>/dev/null || true' EXIT
 
 TARGET_URL="$url" VARIANT="$variant" VUS="$vus" DURATION="$duration" DELAY_MS="$delay" MODE="$mode" \
-  k6 run --quiet --summary-export "$out/k6.json" load/run.js 2> "$out/k6.log" || true
+  k6 run --quiet --summary-export "$out/k6.json" load/run.js > "$out/k6.summary.txt" 2> "$out/k6.log" || true
 
 kill $sampler 2>/dev/null || true
 end=$(date -u +%Y-%m-%dT%H:%M:%SZ)
