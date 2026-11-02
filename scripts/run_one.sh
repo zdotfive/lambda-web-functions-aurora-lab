@@ -21,7 +21,8 @@ TARGET_URL="$url" VARIANT="$variant" VUS="$vus" DURATION="$duration" DELAY_MS="$
 kill $sampler 2>/dev/null || true
 end=$(date -u +%Y-%m-%dT%H:%M:%SZ)
 
-envs=$(grep -o 'ENV [0-9a-f-]*' "$out/k6.log" | sort -u | wc -l | tr -d ' ')
+# No 200 responses means no envId lines: grep must not stop the matrix under pipefail.
+envs=$({ grep -o 'ENV [0-9a-f-]*' "$out/k6.log" || true; } | sort -u | wc -l | tr -d ' ')
 cat > "$out/run.json" <<EOF
 {"run": "$run", "variant": "$variant", "vus": $vus, "delay_ms": $delay, "duration": "$duration",
  "mode": "$mode", "label": "$label", "start": "$start", "end": "$end", "distinct_env_ids": $envs}
