@@ -20,7 +20,7 @@ pass=$(jq -r '.password | @uri' <<< "$db_secret")
 umask 077
 cat > .env <<EOF
 AWS_REGION=$AWS_REGION
-DB_URL=postgresql://$user:$pass@$(out LwfData WriterEndpoint):5432/$(out LwfData DbName)?sslmode=require&application_name=lab-sampler
+DB_URL='postgresql://$user:$pass@$(out LwfData WriterEndpoint):5432/$(out LwfData DbName)?sslmode=require&application_name=lab-sampler'
 LAB_TOKEN=$(secret_json lwf-lab-token)
 URL_EVENT_DIRECT=$(out LwfApp UrlEventDirect)
 URL_EVENT_PROXY=$(out LwfApp UrlEventProxy)

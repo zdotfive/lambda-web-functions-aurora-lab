@@ -7,8 +7,10 @@ LOADGEN_USER_DATA = """#!/bin/bash
 set -eux
 # Safety net: the instance terminates itself after 4 hours.
 shutdown -h +240
-dnf install -y postgresql17 jq git python3-boto3 https://dl.k6.io/rpm/repo.rpm
-dnf install -y k6
+dnf install -y postgresql17 jq git python3-boto3
+# The k6 RPM repo has no aarch64 packages: use the release binary.
+curl -sSfL https://github.com/grafana/k6/releases/download/v2.3.0/k6-v2.3.0-linux-arm64.tar.gz | tar xz -C /tmp
+install -m 755 /tmp/k6-v2.3.0-linux-arm64/k6 /usr/local/bin/k6
 """
 
 

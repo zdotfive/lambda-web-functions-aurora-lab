@@ -1,5 +1,6 @@
 // Shared by all three variants: same query, same driver, same connection settings.
 import { readFileSync } from 'node:fs';
+import { rootCertificates } from 'node:tls';
 import { randomUUID } from 'node:crypto';
 import { SecretsManagerClient, GetSecretValueCommand } from '@aws-sdk/client-secrets-manager';
 
@@ -7,7 +8,8 @@ import { SecretsManagerClient, GetSecretValueCommand } from '@aws-sdk/client-sec
 export const envId = randomUUID();
 export const variant = process.env.VARIANT;
 
-const RDS_CA = readFileSync(new URL('../certs/rds-global-bundle.pem', import.meta.url), 'utf8');
+// Aurora presents an RDS CA certificate, RDS Proxy an ACM one (Amazon Root CA): trust both.
+const CA = [...rootCertificates, readFileSync(new URL('../certs/rds-global-bundle.pem', import.meta.url), 'utf8')];
 
 export const CUSTOMER_SQL = `
 SELECT c.id, c.name, c.email, c.country, c.created_at,
@@ -40,7 +42,7 @@ export function dbConfig() {
         user: secret.username,
         password: secret.password,
         application_name: `lab-${variant}`,
-        ssl: { ca: RDS_CA },
+        ssl: { ca: CA },
         connectionTimeoutMillis: 5000,
       };
     })
