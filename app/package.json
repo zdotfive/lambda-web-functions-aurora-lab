@@ -1,0 +1,13 @@
+{
+  "name": "lambda-web-functions-aurora-lab-app",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "dependencies": {
+    "@aws-sdk/client-secrets-manager": "3.1161.0",
+    "express": "5.3.0",
+    "pg": "8.23.1"
+  }
+}
