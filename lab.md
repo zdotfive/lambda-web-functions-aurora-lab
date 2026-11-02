@@ -287,3 +287,24 @@ Fonte primaria: AWS Pricing API (`aws pricing get-products --region us-east-1`),
      I cold start della Web Function si contano da `platform.initReport`.
   10. Metriche comparse dopo pochi minuti: `AWS/Lambda/Web` `ExecutedRequests`, `HTTPResponseStatusClass4XX` (FunctionName, EndpointName); `AWS/Lambda/Web/Usage` `EndpointActiveEnvironments`, `EndpointActiveEnvironmentThrottles`, `ExecutedRequests` (FunctionName, EndpointName, ExecutionRegion).
   11. `delete-web-function` cancella anche revisioni ed endpoint (stato Deleting, waiter `web-function-deleted` in circa 8 s).
+
+## 2026-11-02 — Deploy, seed, smoke
+
+- `make deploy` (14:59 UTC): LwfNetwork 175 s, LwfData 840 s (Aurora + Proxy). LwfApp fallito alla pubblicazione degli asset:
+  `getaddrinfo ENOTFOUND cdk-hnb659fds-assets-<account>-eu-west-1.s3.eu-west-1.amazonaws.com`. `dig` risolveva, il resolver di macOS no
+  (cache negativa, come nello spike). Risolto con `sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder` e nuovo deploy di LwfApp: 321 s.
+- **CloudFormation crea la Web Function con il solo `FunctionName`**: la limitazione dell'API (revisione ed endpoint obbligatori alla creazione) in CFN non si vede.
+- NetworkConnector `lwf-web-pool-egress` ACTIVE alla versione 1; revisione Active con `egressNetworkConnectorArn` `...:network-connector:nc-<uuid>:1` (l'ARN usa l'ID, non il nome).
+- **k6 sul loadgen**: il repo RPM `dl.k6.io` non ha pacchetti aarch64 (404 su `/rpm/aarch64/repodata/repomd.xml`). Installato il binario `k6-v2.3.0-linux-arm64` dal rilascio GitHub; user data corretto nel codice (non ridistribuito su questa istanza).
+- Seed (dal loadgen, 16:04-16:06 UTC): 1.000.000 clienti in 12,4 s, 5.000.000 ordini in 141,0 s, indice 5,2 s, totale 2 min 39 s; DB 717 MB. **`max_connections` = 401** su `db.t4g.medium`.
+- **Smoke: `event-proxy` → 500 `UNABLE_TO_GET_ISSUER_CERT_LOCALLY`.** Il certificato di RDS Proxy è firmato da Amazon Root CA (ACM), non dalla CA RDS; passare a `pg` solo `global-bundle.pem` sostituisce le CA di sistema.
+  Fix uguale per le tre varianti: `ca: [...tls.rootCertificates, global-bundle.pem]`. Nuova revisione Web `rev-ihqlu` (CFN sostituisce la revisione e sposta il peso al 100%).
+  Dopo il fix lo smoke passa: stesso JSON per id 1, 4242, 999999 su tutte e tre le varianti.
+- `.env` del loadgen: `DB_URL` con `&` non quotato → con `source` la riga va in background e la variabile resta vuota. Valore ora tra apici.
+- `pg_stat_activity` a riposo: le connessioni via RDS Proxy arrivano al DB **con l'`application_name` del client** (`lab-event-proxy`) e `client_addr` = IP del Proxy; il Proxy tiene in più connessioni proprie come `rdsproxyadmin`.
+  `web-pool` a riposo non ha connessioni: `pg.Pool` chiude le connessioni inattive dopo 10 s (default `idleTimeoutMillis`), il `pg.Client` delle Event Functions resta aperto finché vive l'ambiente.
+- SSM Run Command chiude i processi lanciati con `nohup ... &` allo scadere del comando: la matrice gira come unit `systemd-run --unit=lwf-matrix` (avviata 16:14 UTC).
+- Shutdown automatico del loadgen spostato da 19:02 a 20:30 UTC per far stare i test aggiuntivi.
+- **Matrice bloccata (16:14-16:32 UTC).** Dal primo run di riscaldamento l'agente SSM è andato in `ConnectionLost` e il traffico del loadgen è crollato (da circa 300.000 a 2.000 pacchetti ogni 5 minuti), con k6 al 50% di CPU.
+  Causa: in `run.js` l'URL contiene l'id del cliente, quindi k6 crea una serie di metriche per ogni URL (warning: 200.395 → 401.572 → 805.141 → 1.603.144 serie). Memoria esaurita sulla `c7g.large` (4 GB).
+  Fix: `tags: { name: 'GET /customer/:id' }` sulla richiesta. Istanza riavviata alle 16:33 UTC (lo shutdown programmato si perde con il reboot: rimesso alle 20:30 UTC). Il run interrotto è scartato.

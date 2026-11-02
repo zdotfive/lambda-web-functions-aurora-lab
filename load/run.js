@@ -59,6 +59,8 @@ export default function () {
   const res = http.get(`${TARGET_URL}/customer/${id}?delay_ms=${DELAY_MS}`, {
     headers: { 'x-lab-token': __ENV.LAB_TOKEN },
     timeout: '30s',
+    // One name for every id: otherwise each URL becomes its own time series and k6 runs out of memory.
+    tags: { name: 'GET /customer/:id' },
   });
 
   const key = String(res.status);
