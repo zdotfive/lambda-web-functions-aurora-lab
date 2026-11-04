@@ -337,3 +337,4 @@ Fonte primaria: AWS Pricing API (`aws pricing get-products --region us-east-1`),
   - event-proxy d100 v10: 30 richieste in timeout di k6 (60 s) nello stesso secondo, causa non indagata.
   - CloudWatch `DatabaseConnections` di Aurora arriva a 504 con `max_connections` 401: non indagato.
 - `results/raw`: URL delle Function URL sostituiti con `<function-url>`, `k6.log` compressi (da 97 MB a 10 MB).
+- **Destroy 4/11 15:02-15:4x UTC** (`make destroy`, App → Data → Network, exit 0). `leftovers.sh` segnalava `/aws/rds/proxy/lwf-proxy` (creato da RDS, non da CFN). In più tre log group dei custom resource CDK (`/aws/lambda/LwfApp-...`, `/aws/lambda/LwfNetwork-...`) sfuggivano al controllo perché il filtro era `lwf-` minuscolo: cancellati a mano, controllo reso case-insensitive. Poi **CLEAN**. Nessuno snapshot Aurora (`RemovalPolicy.DESTROY`), nessun segreto rimasto. Restano solo CDKToolkit e il budget `lwf-lab-20usd`.

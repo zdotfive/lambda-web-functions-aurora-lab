@@ -26,7 +26,8 @@ report "ENIs" "$(aws ec2 describe-network-interfaces --filters "Name=tag:$TAG_KE
 report "VPCs" "$(aws ec2 describe-vpcs --filters "Name=tag:$TAG_KEY,Values=$TAG_VALUE" --query 'Vpcs[].VpcId' --output text)"
 report "Elastic IPs" "$(aws ec2 describe-addresses --filters "Name=tag:$TAG_KEY,Values=$TAG_VALUE" --query 'Addresses[].PublicIp' --output text)"
 report "S3 buckets" "$(aws s3api list-buckets --query "Buckets[?starts_with(Name, 'lwf-')].Name" --output text)"
-report "Log groups" "$(aws logs describe-log-groups --query "logGroups[?contains(logGroupName, 'lwf-')].logGroupName" --output text)"
+# Case-insensitive: the CDK custom resources log to /aws/lambda/LwfApp-... and /aws/lambda/LwfNetwork-...
+report "Log groups" "$(aws logs describe-log-groups --query 'logGroups[].logGroupName' --output text | tr '\t' '\n' | grep -i lwf | tr '\n' ' ')"
 report "Secrets" "$(aws secretsmanager list-secrets --filters Key=tag-key,Values=$TAG_KEY Key=tag-value,Values=$TAG_VALUE --query 'SecretList[].Name' --output text)"
 report "CloudFormation stacks" "$(aws cloudformation list-stacks --stack-status-filter CREATE_COMPLETE UPDATE_COMPLETE ROLLBACK_COMPLETE DELETE_FAILED UPDATE_ROLLBACK_COMPLETE --query "StackSummaries[?starts_with(StackName, 'Lwf')].StackName" --output text)"
 
