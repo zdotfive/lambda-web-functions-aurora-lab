@@ -311,3 +311,18 @@ Fonte primaria: AWS Pricing API (`aws pricing get-products --region us-east-1`),
 - **Probe di 30 s su web-pool (16:39 UTC) tutto 401**: `run_one.sh` faceva `source .env` senza esportare, quindi k6 non vedeva `LAB_TOKEN`. Anche il riscaldamento interrotto era fatto solo di 401 (lo smoke passava perché usa `curl` dalla shell). Fix: `set -a; source .env; set +a`.
   Effetto collaterale utile: 200 VU senza attese generano 12.917 req/s di 401; la Web Function risponde con 429 `Platform.AccountRequestThrottle` (93.354), `EndpointRequestThrottle` (8.752), `EndpointMaxEnvThrottle` (6.497) e 26.349 x 503.
   Il limite di account `maxTotalRateLimit` di 10.000 RPS si vede davvero. Questo probe non è un risultato del confronto (solo 401).
+- **Matrice 1 (16:39-17:23 UTC) scartata, conservata sul loadgen in `/root/aborted/matrix1`.** Ordine: tre riscaldamenti, poi d0 per event-direct (4 livelli) ed event-proxy (4 livelli).
+  Si è fermata al primo run di web-pool (d0, 10 VU): 5.770 richieste, tutte 500. In quel momento Aurora era a 404 `DatabaseConnections` (`max_connections` 401): le teneva gli ambienti Event ancora vivi con il loro `pg.Client` e RDS Proxy (`DatabaseConnections` del Proxy 196, `ClientConnections` 251).
+  Il run senza 200 ha fatto uscire `run_one.sh` (`grep` senza righe `ENV` + `pipefail`): corretto.
+  **Effetto da riportare nell'articolo**: dopo un picco, gli ambienti Event inattivi tengono aperte le connessioni al DB e RDS Proxy tiene il suo pool (con 0 client il Proxy è rimasto a circa 100 connessioni per oltre mezz'ora). Chi arriva dopo trova il DB pieno.
+  `event-proxy` a 500 VU, delay 0: 640 `envId` distinti nelle risposte.
+- **Matrice 2, una variante alla volta** (`scripts/orchestrate.sh` dal portatile, avvio 18:08 UTC), ordine event-direct → web-pool → event-proxy (proxy per ultimo per il suo pool inattivo). Prima di ogni blocco:
+  riciclo degli ambienti Event (`scripts/reset_envs.py`: cambia la variabile `LAB_RESET`), 60 s di attesa, `pg_terminate_backend` sulle connessioni rimaste dell'utente applicativo, poi riscaldamento (200 VU, delay 100, 2 min) e 8 run.
+  Shutdown del loadgen spostato alle 22:00 UTC.
+
+## 2026-11-03/04 — Matrice 2 persa, terza esecuzione
+
+- Il blocco event-direct della matrice 2 è finito alle 18:46 UTC, web-pool è partito alle 18:47 come unit systemd. Poi l'orchestratore sul portatile ha perso SSM (portatile in sospensione, poi token SSO scaduto) e si è fermato in polling; event-proxy non è mai partito.
+- **Alle 22:00 UTC il loadgen si è spento con `InstanceInitiatedShutdownBehavior=TERMINATE`**: istanza e disco cancellati, e nessun risultato era stato copiato su S3. Persi matrice 1 (archivio) e matrice 2. Restano solo le metriche CloudWatch.
+- Aurora, Proxy ed endpoint VPC sono rimasti accesi circa 23 ore senza traffico. Costo lordo da Cost Explorer (prima dei crediti): 0,12 $ il 1/11, 6,33 $ il 2/11 (Lambda 4,23 $, RDS 1,09 $, EC2 0,54 $, VPC 0,23 $), 0,49 $ parziale il 3/11.
+- Correzioni: spegnimento di sicurezza con `STOP` e dopo 8 ore; `run_one.sh` copia ogni run su S3 appena finisce (`RESULTS_BUCKET` in `.env`); il polling dell'orchestratore riprova invece di uscire quando SSM non risponde.

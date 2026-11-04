@@ -41,7 +41,12 @@ for v in "${@:-event-direct web-pool event-proxy}"; do
     unit="lwf-$variant-$(date -u +%H%M%S)"
     on_loadgen "cd /root/lab && systemd-run --unit=$unit -p WorkingDirectory=/root/lab -E VARIANTS=$variant bash -c 'load/matrix.sh --run >> results/raw/matrix.log 2>&1'"
     echo "$(date -u +%H:%M:%S) [$variant] started unit $unit"
-    while [[ "$(on_loadgen "systemctl is-active $unit" | tr -d '[:space:]')" == active ]]; do sleep 120; done
-    echo "$(date -u +%H:%M:%S) [$variant] finished: $(on_loadgen "systemctl is-active $unit")"
+    # A failed poll (laptop asleep, expired credentials) must not end the orchestrator: retry.
+    while true; do
+      state=$(on_loadgen "systemctl is-active $unit" 2>/dev/null | tr -d '[:space:]') || state=unknown
+      [[ "$state" == active || "$state" == unknown ]] || break
+      sleep 120
+    done
+    echo "$(date -u +%H:%M:%S) [$variant] finished: $state"
   done
 done

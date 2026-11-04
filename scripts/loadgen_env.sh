@@ -25,5 +25,6 @@ LAB_TOKEN=$(secret_json lwf-lab-token)
 URL_EVENT_DIRECT=$(out LwfApp UrlEventDirect)
 URL_EVENT_PROXY=$(out LwfApp UrlEventProxy)
 URL_WEB_POOL=$(out LwfApp UrlWebPool)
+RESULTS_BUCKET=$(out LwfApp CodeBucketName)
 EOF
 echo ".env written"

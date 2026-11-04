@@ -28,3 +28,9 @@ cat > "$out/run.json" <<EOF
  "mode": "$mode", "label": "$label", "start": "$start", "end": "$end", "distinct_env_ids": $envs}
 EOF
 echo "$run done ($start -> $end), distinct envIds: $envs"
+
+# Copy each run to S3 as soon as it ends: the loadgen disk is not the only copy.
+if [[ -n "${RESULTS_BUCKET:-}" ]]; then
+  aws s3 cp --recursive --quiet "$out" "s3://$RESULTS_BUCKET/results/raw/$run/" || echo "$run: upload to S3 failed"
+  [[ -f results/raw/matrix.log ]] && aws s3 cp --quiet results/raw/matrix.log "s3://$RESULTS_BUCKET/results/raw/matrix.log" || true
+fi

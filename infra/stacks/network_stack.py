@@ -5,8 +5,8 @@ from constructs import Construct
 
 LOADGEN_USER_DATA = """#!/bin/bash
 set -eux
-# Safety net: the instance terminates itself after 4 hours.
-shutdown -h +240
+# Safety net: the instance stops itself after 8 hours. Stop, not terminate: results survive on the disk.
+shutdown -h +480
 dnf install -y postgresql17 jq git python3-boto3
 # The k6 RPM repo has no aarch64 packages: use the release binary.
 curl -sSfL https://github.com/grafana/k6/releases/download/v2.3.0/k6-v2.3.0-linux-arm64.tar.gz | tar xz -C /tmp
@@ -89,7 +89,7 @@ class NetworkStack(Stack):
             role=loadgen_role,
             user_data=user_data,
             associate_public_ip_address=True,
-            instance_initiated_shutdown_behavior=ec2.InstanceInitiatedShutdownBehavior.TERMINATE,
+            instance_initiated_shutdown_behavior=ec2.InstanceInitiatedShutdownBehavior.STOP,
             require_imdsv2=True,
             block_devices=[
                 ec2.BlockDevice(device_name="/dev/xvda", volume=ec2.BlockDeviceVolume.ebs(20, delete_on_termination=True))
