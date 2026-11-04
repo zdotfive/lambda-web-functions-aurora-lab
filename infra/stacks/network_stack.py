@@ -88,6 +88,7 @@ class NetworkStack(Stack):
             security_group=self.sg_loadgen,
             role=loadgen_role,
             user_data=user_data,
+            user_data_causes_replacement=True,
             associate_public_ip_address=True,
             instance_initiated_shutdown_behavior=ec2.InstanceInitiatedShutdownBehavior.STOP,
             require_imdsv2=True,
