@@ -1,0 +1,17 @@
+ts,application_name,usename,client_addr,state,count
+2026-11-04T08:25:04Z,,rdsproxyadmin,10.0.2.8,idle,1
+2026-11-04T08:25:04Z,,rdsproxyadmin,10.0.3.111,idle,1
+2026-11-04T08:25:04Z,lab-event-direct,labadmin,10.0.2.152,idle,67
+2026-11-04T08:25:04Z,lab-event-direct,labadmin,10.0.3.80,idle,66
+2026-11-04T08:25:47Z,,rdsproxyadmin,10.0.2.8,idle,1
+2026-11-04T08:25:47Z,,rdsproxyadmin,10.0.3.111,idle,1
+2026-11-04T08:25:47Z,lab-event-direct,labadmin,10.0.2.152,active,39
+2026-11-04T08:25:47Z,lab-event-direct,labadmin,10.0.2.152,idle,50
+2026-11-04T08:25:47Z,lab-event-direct,labadmin,10.0.3.80,active,31
+2026-11-04T08:25:47Z,lab-event-direct,labadmin,10.0.3.80,idle,41
+2026-11-04T08:27:28Z,,rdsproxyadmin,10.0.2.8,idle,1
+2026-11-04T08:27:28Z,,rdsproxyadmin,10.0.3.111,idle,1
+2026-11-04T08:27:28Z,lab-event-direct,labadmin,10.0.2.152,active,5
+2026-11-04T08:27:28Z,lab-event-direct,labadmin,10.0.2.152,idle,84
+2026-11-04T08:27:28Z,lab-event-direct,labadmin,10.0.3.80,active,2
+2026-11-04T08:27:28Z,lab-event-direct,labadmin,10.0.3.80,idle,70

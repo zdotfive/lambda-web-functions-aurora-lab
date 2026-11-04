@@ -1,0 +1,2 @@
+{"run": "20261104T125617Z_web-pool_d100_v500_coldspike", "variant": "web-pool", "vus": 500, "delay_ms": 100, "duration": "2m30s",
+ "mode": "spike", "label": "coldspike", "start": "2026-11-04T12:56:17Z", "end": "2026-11-04T12:58:48Z", "distinct_env_ids": 12}

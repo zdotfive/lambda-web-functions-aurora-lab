@@ -1,0 +1,10 @@
+{
+ "status": "Complete",
+ "rows": [
+  {
+   "cold_starts": "5",
+   "avg_init_ms": "411.2",
+   "max_init_ms": "497"
+  }
+ ]
+}

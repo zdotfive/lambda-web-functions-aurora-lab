@@ -1,0 +1,73 @@
+ 1  event-direct  delay=0    vus=10
+ 2  event-direct  delay=0    vus=50
+ 3  event-direct  delay=0    vus=200
+ 4  event-direct  delay=0    vus=500
+ 5  event-direct  delay=100  vus=10
+ 6  event-direct  delay=100  vus=50
+ 7  event-direct  delay=100  vus=200
+ 8  event-direct  delay=100  vus=500
+runs: 8 x 3m, pause 60s -> about 31 min
+plus one warm-up run per variant (200 VUs, delay 100, 2m), discarded
+20261104T080953Z_event-direct_d100_v200_warmup done (2026-11-04T08:09:53Z -> 2026-11-04T08:11:54Z), distinct envIds: 201
+20261104T081255Z_event-direct_d0_v10 done (2026-11-04T08:12:55Z -> 2026-11-04T08:15:55Z), distinct envIds: 12
+20261104T081656Z_event-direct_d0_v50 done (2026-11-04T08:16:56Z -> 2026-11-04T08:19:57Z), distinct envIds: 58
+20261104T082058Z_event-direct_d0_v200 done (2026-11-04T08:20:58Z -> 2026-11-04T08:24:02Z), distinct envIds: 136
+20261104T082504Z_event-direct_d0_v500 done (2026-11-04T08:25:04Z -> 2026-11-04T08:28:09Z), distinct envIds: 161
+20261104T082910Z_event-direct_d100_v10 done (2026-11-04T08:29:10Z -> 2026-11-04T08:32:11Z), distinct envIds: 11
+20261104T083312Z_event-direct_d100_v50 done (2026-11-04T08:33:12Z -> 2026-11-04T08:36:12Z), distinct envIds: 51
+20261104T083713Z_event-direct_d100_v200 done (2026-11-04T08:37:13Z -> 2026-11-04T08:40:13Z), distinct envIds: 201
+20261104T084115Z_event-direct_d100_v500 done (2026-11-04T08:41:15Z -> 2026-11-04T08:44:17Z), distinct envIds: 283
+ 1  web-pool      delay=0    vus=10
+ 2  web-pool      delay=0    vus=50
+ 3  web-pool      delay=0    vus=200
+ 4  web-pool      delay=0    vus=500
+ 5  web-pool      delay=100  vus=10
+ 6  web-pool      delay=100  vus=50
+ 7  web-pool      delay=100  vus=200
+ 8  web-pool      delay=100  vus=500
+runs: 8 x 3m, pause 60s -> about 31 min
+plus one warm-up run per variant (200 VUs, delay 100, 2m), discarded
+20261104T090012Z_web-pool_d100_v200_warmup done (2026-11-04T09:00:12Z -> 2026-11-04T09:02:13Z), distinct envIds: 5
+20261104T090314Z_web-pool_d0_v10 done (2026-11-04T09:03:14Z -> 2026-11-04T09:06:14Z), distinct envIds: 5
+20261104T090715Z_web-pool_d0_v50 done (2026-11-04T09:07:15Z -> 2026-11-04T09:10:16Z), distinct envIds: 18
+20261104T091117Z_web-pool_d0_v200 done (2026-11-04T09:11:17Z -> 2026-11-04T09:14:17Z), distinct envIds: 20
+20261104T091518Z_web-pool_d0_v500 done (2026-11-04T09:15:18Z -> 2026-11-04T09:18:23Z), distinct envIds: 14
+20261104T091924Z_web-pool_d100_v10 done (2026-11-04T09:19:24Z -> 2026-11-04T09:22:25Z), distinct envIds: 20
+20261104T092326Z_web-pool_d100_v50 done (2026-11-04T09:23:26Z -> 2026-11-04T09:26:26Z), distinct envIds: 20
+20261104T092727Z_web-pool_d100_v200 done (2026-11-04T09:27:27Z -> 2026-11-04T09:30:28Z), distinct envIds: 5
+20261104T093129Z_web-pool_d100_v500 done (2026-11-04T09:31:29Z -> 2026-11-04T09:34:30Z), distinct envIds: 12
+ 1  event-proxy   delay=0    vus=10
+ 2  event-proxy   delay=0    vus=50
+ 3  event-proxy   delay=0    vus=200
+ 4  event-proxy   delay=0    vus=500
+ 5  event-proxy   delay=100  vus=10
+ 6  event-proxy   delay=100  vus=50
+ 7  event-proxy   delay=100  vus=200
+ 8  event-proxy   delay=100  vus=500
+runs: 8 x 3m, pause 60s -> about 31 min
+plus one warm-up run per variant (200 VUs, delay 100, 2m), discarded
+20261104T103253Z_event-proxy_d100_v200_warmup done (2026-11-04T10:32:53Z -> 2026-11-04T10:34:53Z), distinct envIds: 200
+20261104T103554Z_event-proxy_d0_v10 done (2026-11-04T10:35:54Z -> 2026-11-04T10:38:54Z), distinct envIds: 11
+20261104T103956Z_event-proxy_d0_v50 done (2026-11-04T10:39:56Z -> 2026-11-04T10:42:56Z), distinct envIds: 60
+20261104T104357Z_event-proxy_d0_v200 done (2026-11-04T10:43:57Z -> 2026-11-04T10:46:57Z), distinct envIds: 200
+20261104T104759Z_event-proxy_d0_v500 done (2026-11-04T10:47:59Z -> 2026-11-04T10:51:20Z), distinct envIds: 651
+20261104T105222Z_event-proxy_d100_v10 done (2026-11-04T10:52:22Z -> 2026-11-04T10:55:23Z), distinct envIds: 13
+20261104T105624Z_event-proxy_d100_v50 done (2026-11-04T10:56:24Z -> 2026-11-04T10:59:24Z), distinct envIds: 54
+20261104T110025Z_event-proxy_d100_v200 done (2026-11-04T11:00:25Z -> 2026-11-04T11:03:25Z), distinct envIds: 207
+20261104T110427Z_event-proxy_d100_v500 done (2026-11-04T11:04:27Z -> 2026-11-04T11:07:28Z), distinct envIds: 563
+12:56:16 [cold-web-pool] terminated 200
+20261104T125617Z_web-pool_d100_v500_coldspike done (2026-11-04T12:56:17Z -> 2026-11-04T12:58:48Z), distinct envIds: 12
+12:59:49 [cold-event-direct] terminated 0
+20261104T125949Z_event-direct_d100_v500_coldspike done (2026-11-04T12:59:49Z -> 2026-11-04T13:02:24Z), distinct envIds: 253
+13:03:26 [cold-event-proxy] terminated 253
+20261104T130327Z_event-proxy_d100_v500_coldspike done (2026-11-04T13:03:27Z -> 2026-11-04T13:05:58Z), distinct envIds: 501
+13:07:00 [cold] done
+20261104T142417Z_web-pool_d100_v200_warmup-pool5 done (2026-11-04T14:24:17Z -> 2026-11-04T14:26:19Z), distinct envIds: 5
+20261104T142724Z_web-pool_d100_v200_pool5 done (2026-11-04T14:27:24Z -> 2026-11-04T14:30:26Z), distinct envIds: 5
+20261104T143235Z_web-pool_d100_v200_warmup-pool10 done (2026-11-04T14:32:35Z -> 2026-11-04T14:34:36Z), distinct envIds: 5
+20261104T143542Z_web-pool_d100_v200_pool10 done (2026-11-04T14:35:42Z -> 2026-11-04T14:38:43Z), distinct envIds: 5
+20261104T144054Z_web-pool_d100_v200_warmup-pool20 done (2026-11-04T14:40:54Z -> 2026-11-04T14:42:55Z), distinct envIds: 5
+20261104T144402Z_web-pool_d100_v200_pool20 done (2026-11-04T14:44:02Z -> 2026-11-04T14:47:03Z), distinct envIds: 5
+20261104T144913Z_web-pool_d100_v200_warmup-maxenv done (2026-11-04T14:49:13Z -> 2026-11-04T14:51:14Z), distinct envIds: 5
+20261104T145220Z_web-pool_d100_v500_maxenv20 done (2026-11-04T14:52:20Z -> 2026-11-04T14:55:21Z), distinct envIds: 12
+20261104T145715Z_web-pool_d100_v500_maxenv2 done (2026-11-04T14:57:15Z -> 2026-11-04T15:00:17Z), distinct envIds: 12

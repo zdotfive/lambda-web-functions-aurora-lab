@@ -1,0 +1,2 @@
+{"run": "20261104T125949Z_event-direct_d100_v500_coldspike", "variant": "event-direct", "vus": 500, "delay_ms": 100, "duration": "2m30s",
+ "mode": "spike", "label": "coldspike", "start": "2026-11-04T12:59:49Z", "end": "2026-11-04T13:02:24Z", "distinct_env_ids": 253}

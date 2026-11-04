@@ -1,0 +1,33 @@
+
+
+  █ TOTAL RESULTS 
+
+    checks_total.......: 16546   91.8777/s
+    checks_succeeded...: 100.00% 16546 out of 16546
+    checks_failed......: 0.00%   0 out of 16546
+
+    ✓ status 200
+
+    CUSTOM
+    env_ids_seen_by_vu.............: 199    1.10502/s
+    errors.........................: 0.00%  0 out of 16546
+    status_200.....................: 16546  91.8777/s
+
+    HTTP
+    http_req_duration..............: avg=108.68ms min=105.37ms med=108.14ms p(90)=109.45ms p(95)=110.33ms p(99)=114.91ms max=476.61ms
+      { expected_response:true }...: avg=108.68ms min=105.37ms med=108.14ms p(90)=109.45ms p(95)=110.33ms p(99)=114.91ms max=476.61ms
+    http_req_failed................: 0.00%  0 out of 16546
+    http_reqs......................: 16546  91.8777/s
+
+    EXECUTION
+    iteration_duration.............: avg=108.8ms  min=105.46ms med=108.25ms p(90)=109.56ms p(95)=110.45ms p(99)=115.02ms max=487.04ms
+    iterations.....................: 16546  91.8777/s
+    vus............................: 10     min=10         max=10
+    vus_max........................: 10     min=10         max=10
+
+    NETWORK
+    data_received..................: 12 MB  67 kB/s
+    data_sent......................: 3.3 MB 19 kB/s
+
+
+

@@ -1,0 +1,2 @@
+{"run": "20261104T080953Z_event-direct_d100_v200_warmup", "variant": "event-direct", "vus": 200, "delay_ms": 100, "duration": "2m",
+ "mode": "constant", "label": "warmup", "start": "2026-11-04T08:09:53Z", "end": "2026-11-04T08:11:54Z", "distinct_env_ids": 201}

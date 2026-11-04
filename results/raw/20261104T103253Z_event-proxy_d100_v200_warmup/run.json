@@ -1,0 +1,2 @@
+{"run": "20261104T103253Z_event-proxy_d100_v200_warmup", "variant": "event-proxy", "vus": 200, "delay_ms": 100, "duration": "2m",
+ "mode": "constant", "label": "warmup", "start": "2026-11-04T10:32:53Z", "end": "2026-11-04T10:34:53Z", "distinct_env_ids": 200}

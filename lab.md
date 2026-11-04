@@ -326,3 +326,14 @@ Fonte primaria: AWS Pricing API (`aws pricing get-products --region us-east-1`),
 - **Alle 22:00 UTC il loadgen si è spento con `InstanceInitiatedShutdownBehavior=TERMINATE`**: istanza e disco cancellati, e nessun risultato era stato copiato su S3. Persi matrice 1 (archivio) e matrice 2. Restano solo le metriche CloudWatch.
 - Aurora, Proxy ed endpoint VPC sono rimasti accesi circa 23 ore senza traffico. Costo lordo da Cost Explorer (prima dei crediti): 0,12 $ il 1/11, 6,33 $ il 2/11 (Lambda 4,23 $, RDS 1,09 $, EC2 0,54 $, VPC 0,23 $), 0,49 $ parziale il 3/11.
 - Correzioni: spegnimento di sicurezza con `STOP` e dopo 8 ore; `run_one.sh` copia ogni run su S3 appena finisce (`RESULTS_BUCKET` in `.env`); il polling dell'orchestratore riprova invece di uscire quando SSM non risponde.
+- Loadgen ricreato (4/11, 08:00 UTC). Primo deploy di LwfNetwork fallito: CFN ha provato ad aggiornare l'istanza terminata (`NotFound`). Fix: `user_data_causes_replacement=True`.
+- **Terza esecuzione, quella riportata in `results/SUMMARY.md`.** Matrice 08:09-11:08 UTC, picco a freddo 12:56-13:06, pool 14:24-14:47, maxEnvironments 14:49-15:00. 39 run, tutti copiati su S3 alla fine di ognuno.
+- Il portatile a batteria va in sospensione anche con `caffeinate -is` (`-s` vale solo con l'alimentatore): due stalli del polling (web-pool → event-proxy circa 57 min, event-proxy → picco a freddo circa 70 min più il `sleep 900` fermo). Il picco a freddo è stato spostato sul loadgen (`/root/cold.sh`, unit `lwf-cold`), il resto rilanciato con l'alimentatore collegato.
+- `extras.sh` è uscito al primo run: `$3` senza default in `run_unit` con `set -u`. Corretto con `${3:-}`.
+- Osservazioni nuove:
+  - web-pool con delay 100 resta su 5 ambienti a 200 VU (circa 40 richieste concorrenti per ambiente): le richieste aspettano una connessione del pool dentro l'ambiente e Lambda non aggiunge ambienti. `POOL_MAX` 5/10/20 → 238/476/893 req/s, ambienti sempre 5.
+  - `maxEnvironments` da 20 a 2: per circa 40 s rispondono ancora i 12 ambienti del run precedente (120 connessioni), poi 20 connessioni stabili (2 × `POOL_MAX`). Il client vede 429 `EndpointMaxEnvThrottle`/`EndpointRequestThrottle` e 503.
+  - Scenario A: CPU di Aurora 96-98% per almeno 2 minuti a 500 VU in tutte le varianti (criterio di stop del piano raggiunto, run non fermati). p99 di circa 5 s = `connectionTimeoutMillis` 5000.
+  - event-proxy d100 v10: 30 richieste in timeout di k6 (60 s) nello stesso secondo, causa non indagata.
+  - CloudWatch `DatabaseConnections` di Aurora arriva a 504 con `max_connections` 401: non indagato.
+- `results/raw`: URL delle Function URL sostituiti con `<function-url>`, `k6.log` compressi (da 97 MB a 10 MB).

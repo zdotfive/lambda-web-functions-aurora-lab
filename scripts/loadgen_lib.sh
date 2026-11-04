@@ -38,7 +38,7 @@ terminate_leftovers() {
 # Runs a command in /root/lab as a systemd unit (SSM would kill a background process) and waits for it.
 run_unit() {
   local unit=$1 cmd=$2 state
-  on_loadgen "cd /root/lab && systemd-run --unit=$unit -p WorkingDirectory=/root/lab $3 bash -c '$cmd >> results/raw/matrix.log 2>&1'" >/dev/null
+  on_loadgen "cd /root/lab && systemd-run --unit=$unit -p WorkingDirectory=/root/lab ${3:-} bash -c '$cmd >> results/raw/matrix.log 2>&1'" >/dev/null
   log "[$unit] started"
   while true; do
     state=$(on_loadgen "systemctl is-active $unit" 2>/dev/null | tr -d '[:space:]') || state=unknown

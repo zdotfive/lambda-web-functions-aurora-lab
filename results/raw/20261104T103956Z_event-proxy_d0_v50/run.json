@@ -1,0 +1,2 @@
+{"run": "20261104T103956Z_event-proxy_d0_v50", "variant": "event-proxy", "vus": 50, "delay_ms": 0, "duration": "3m",
+ "mode": "constant", "label": "", "start": "2026-11-04T10:39:56Z", "end": "2026-11-04T10:42:56Z", "distinct_env_ids": 60}

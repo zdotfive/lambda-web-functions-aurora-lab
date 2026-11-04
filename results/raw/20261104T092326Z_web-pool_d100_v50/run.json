@@ -1,0 +1,2 @@
+{"run": "20261104T092326Z_web-pool_d100_v50", "variant": "web-pool", "vus": 50, "delay_ms": 100, "duration": "3m",
+ "mode": "constant", "label": "", "start": "2026-11-04T09:23:26Z", "end": "2026-11-04T09:26:26Z", "distinct_env_ids": 20}

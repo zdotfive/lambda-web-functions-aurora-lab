@@ -1,0 +1,2 @@
+{"run": "20261104T081656Z_event-direct_d0_v50", "variant": "event-direct", "vus": 50, "delay_ms": 0, "duration": "3m",
+ "mode": "constant", "label": "", "start": "2026-11-04T08:16:56Z", "end": "2026-11-04T08:19:57Z", "distinct_env_ids": 58}

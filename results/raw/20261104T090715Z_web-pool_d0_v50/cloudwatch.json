@@ -1,0 +1,340 @@
+{
+ "run": "20261104T090715Z_web-pool_d0_v50",
+ "start": "2026-11-04T09:06:00+00:00",
+ "end": "2026-11-04T09:12:00+00:00",
+ "metrics": {
+  "AWS/RDS|DatabaseConnections|DBInstanceIdentifier=lwf-aurora-writer|Maximum": [
+   {
+    "ts": "2026-11-04T10:06:00+01:00",
+    "value": 2.0
+   },
+   {
+    "ts": "2026-11-04T10:07:00+01:00",
+    "value": 75.0
+   },
+   {
+    "ts": "2026-11-04T10:08:00+01:00",
+    "value": 88.0
+   },
+   {
+    "ts": "2026-11-04T10:09:00+01:00",
+    "value": 83.0
+   },
+   {
+    "ts": "2026-11-04T10:10:00+01:00",
+    "value": 70.0
+   },
+   {
+    "ts": "2026-11-04T10:11:00+01:00",
+    "value": 196.0
+   }
+  ],
+  "AWS/RDS|DatabaseConnections|DBInstanceIdentifier=lwf-aurora-writer|Average": [
+   {
+    "ts": "2026-11-04T10:06:00+01:00",
+    "value": 2.0
+   },
+   {
+    "ts": "2026-11-04T10:07:00+01:00",
+    "value": 75.0
+   },
+   {
+    "ts": "2026-11-04T10:08:00+01:00",
+    "value": 88.0
+   },
+   {
+    "ts": "2026-11-04T10:09:00+01:00",
+    "value": 83.0
+   },
+   {
+    "ts": "2026-11-04T10:10:00+01:00",
+    "value": 70.0
+   },
+   {
+    "ts": "2026-11-04T10:11:00+01:00",
+    "value": 196.0
+   }
+  ],
+  "AWS/RDS|CPUUtilization|DBInstanceIdentifier=lwf-aurora-writer|Maximum": [
+   {
+    "ts": "2026-11-04T10:06:00+01:00",
+    "value": 68.67188801866355
+   },
+   {
+    "ts": "2026-11-04T10:07:00+01:00",
+    "value": 13.763688568376066
+   },
+   {
+    "ts": "2026-11-04T10:08:00+01:00",
+    "value": 90.532376974155
+   },
+   {
+    "ts": "2026-11-04T10:09:00+01:00",
+    "value": 97.84492816427213
+   },
+   {
+    "ts": "2026-11-04T10:10:00+01:00",
+    "value": 97.70545890821835
+   },
+   {
+    "ts": "2026-11-04T10:11:00+01:00",
+    "value": 19.085752419085754
+   }
+  ],
+  "AWS/RDS|CPUUtilization|DBInstanceIdentifier=lwf-aurora-writer|Average": [
+   {
+    "ts": "2026-11-04T10:06:00+01:00",
+    "value": 68.67188801866355
+   },
+   {
+    "ts": "2026-11-04T10:07:00+01:00",
+    "value": 13.763688568376066
+   },
+   {
+    "ts": "2026-11-04T10:08:00+01:00",
+    "value": 90.532376974155
+   },
+   {
+    "ts": "2026-11-04T10:09:00+01:00",
+    "value": 97.84492816427213
+   },
+   {
+    "ts": "2026-11-04T10:10:00+01:00",
+    "value": 97.70545890821835
+   },
+   {
+    "ts": "2026-11-04T10:11:00+01:00",
+    "value": 19.085752419085754
+   }
+  ],
+  "AWS/RDS|FreeableMemory|DBInstanceIdentifier=lwf-aurora-writer|Minimum": [
+   {
+    "ts": "2026-11-04T10:06:00+01:00",
+    "value": 1958875136.0
+   },
+   {
+    "ts": "2026-11-04T10:07:00+01:00",
+    "value": 1223643136.0
+   },
+   {
+    "ts": "2026-11-04T10:08:00+01:00",
+    "value": 1485647872.0
+   },
+   {
+    "ts": "2026-11-04T10:09:00+01:00",
+    "value": 1456607232.0
+   },
+   {
+    "ts": "2026-11-04T10:10:00+01:00",
+    "value": 1522114560.0
+   },
+   {
+    "ts": "2026-11-04T10:11:00+01:00",
+    "value": 800940032.0
+   }
+  ],
+  "AWS/Lambda/Web|ExecutedRequests|FunctionName=lwf-web-pool,EndpointName=main|Sum": [
+   {
+    "ts": "2026-11-04T10:06:00+01:00",
+    "value": 32715.0
+   },
+   {
+    "ts": "2026-11-04T10:07:00+01:00",
+    "value": 142078.0
+   },
+   {
+    "ts": "2026-11-04T10:08:00+01:00",
+    "value": 209002.0
+   },
+   {
+    "ts": "2026-11-04T10:09:00+01:00",
+    "value": 205250.0
+   },
+   {
+    "ts": "2026-11-04T10:10:00+01:00",
+    "value": 51528.0
+   },
+   {
+    "ts": "2026-11-04T10:11:00+01:00",
+    "value": 112494.0
+   }
+  ],
+  "AWS/Lambda/Web|HTTPResponseStatusClass4XX|FunctionName=lwf-web-pool,EndpointName=main|Sum": [
+   {
+    "ts": "2026-11-04T10:11:00+01:00",
+    "value": 5319.0
+   }
+  ],
+  "AWS/Lambda/Web|HTTPResponseStatusClass5XX|FunctionName=lwf-web-pool,EndpointName=main|Sum": [
+   {
+    "ts": "2026-11-04T10:11:00+01:00",
+    "value": 185.0
+   }
+  ],
+  "AWS/Lambda/Web|EnvironmentActiveTime|FunctionName=lwf-web-pool|Sum": [
+   {
+    "ts": "2026-11-04T10:06:00+01:00",
+    "value": 179999.0
+   },
+   {
+    "ts": "2026-11-04T10:07:00+01:00",
+    "value": 485751.0
+   },
+   {
+    "ts": "2026-11-04T10:08:00+01:00",
+    "value": 866483.0
+   },
+   {
+    "ts": "2026-11-04T10:09:00+01:00",
+    "value": 1045602.0
+   },
+   {
+    "ts": "2026-11-04T10:10:00+01:00",
+    "value": 1107597.0
+   },
+   {
+    "ts": "2026-11-04T10:11:00+01:00",
+    "value": 542888.0
+   }
+  ],
+  "AWS/Lambda/Web|EnvironmentCPUTime|FunctionName=lwf-web-pool|Sum": [
+   {
+    "ts": "2026-11-04T10:06:00+01:00",
+    "value": 97543.0
+   },
+   {
+    "ts": "2026-11-04T10:07:00+01:00",
+    "value": 75329.0
+   },
+   {
+    "ts": "2026-11-04T10:08:00+01:00",
+    "value": 192804.0
+   },
+   {
+    "ts": "2026-11-04T10:09:00+01:00",
+    "value": 227234.0
+   },
+   {
+    "ts": "2026-11-04T10:10:00+01:00",
+    "value": 258822.0
+   },
+   {
+    "ts": "2026-11-04T10:11:00+01:00",
+    "value": 24340.0
+   }
+  ],
+  "AWS/Lambda/Web|EnvironmentMaxMemoryUsage|FunctionName=lwf-web-pool|Maximum": [
+   {
+    "ts": "2026-11-04T10:06:00+01:00",
+    "value": 473.0
+   },
+   {
+    "ts": "2026-11-04T10:07:00+01:00",
+    "value": 485.0
+   },
+   {
+    "ts": "2026-11-04T10:08:00+01:00",
+    "value": 478.0
+   },
+   {
+    "ts": "2026-11-04T10:09:00+01:00",
+    "value": 485.0
+   },
+   {
+    "ts": "2026-11-04T10:10:00+01:00",
+    "value": 482.0
+   },
+   {
+    "ts": "2026-11-04T10:11:00+01:00",
+    "value": 476.0
+   }
+  ],
+  "AWS/Lambda/Web|EnvironmentConcurrentRequests|FunctionName=lwf-web-pool|Maximum": [
+   {
+    "ts": "2026-11-04T10:06:00+01:00",
+    "value": 64.0
+   },
+   {
+    "ts": "2026-11-04T10:07:00+01:00",
+    "value": 64.0
+   },
+   {
+    "ts": "2026-11-04T10:08:00+01:00",
+    "value": 64.0
+   },
+   {
+    "ts": "2026-11-04T10:09:00+01:00",
+    "value": 64.0
+   },
+   {
+    "ts": "2026-11-04T10:10:00+01:00",
+    "value": 64.0
+   },
+   {
+    "ts": "2026-11-04T10:11:00+01:00",
+    "value": 64.0
+   }
+  ],
+  "AWS/Lambda/Web|EnvironmentConcurrentRequests|FunctionName=lwf-web-pool|Average": [
+   {
+    "ts": "2026-11-04T10:06:00+01:00",
+    "value": 41.5
+   },
+   {
+    "ts": "2026-11-04T10:07:00+01:00",
+    "value": 15.277777777777779
+   },
+   {
+    "ts": "2026-11-04T10:08:00+01:00",
+    "value": 9.4
+   },
+   {
+    "ts": "2026-11-04T10:09:00+01:00",
+    "value": 24.0
+   },
+   {
+    "ts": "2026-11-04T10:10:00+01:00",
+    "value": 16.785714285714285
+   },
+   {
+    "ts": "2026-11-04T10:11:00+01:00",
+    "value": 7.933333333333334
+   }
+  ],
+  "AWS/Lambda/Web/Usage|EndpointActiveEnvironments|FunctionName=lwf-web-pool,EndpointName=main,ExecutionRegion=eu-west-1|Maximum": [
+   {
+    "ts": "2026-11-04T10:06:00+01:00",
+    "value": 5.0
+   },
+   {
+    "ts": "2026-11-04T10:07:00+01:00",
+    "value": 18.0
+   },
+   {
+    "ts": "2026-11-04T10:08:00+01:00",
+    "value": 18.0
+   },
+   {
+    "ts": "2026-11-04T10:09:00+01:00",
+    "value": 17.0
+   },
+   {
+    "ts": "2026-11-04T10:10:00+01:00",
+    "value": 14.0
+   },
+   {
+    "ts": "2026-11-04T10:11:00+01:00",
+    "value": 20.0
+   }
+  ],
+  "AWS/Lambda/Web/Usage|EndpointRequestThrottles|FunctionName=lwf-web-pool,EndpointName=main,ExecutionRegion=eu-west-1|Sum": [],
+  "AWS/Lambda/Web/Usage|AccountRequestThrottles|FunctionName=lwf-web-pool,EndpointName=main,ExecutionRegion=eu-west-1|Sum": [],
+  "AWS/Lambda/Web/Usage|AccountActiveVCPUArm64Throttles|FunctionName=lwf-web-pool,EndpointName=main,ExecutionRegion=eu-west-1|Sum": [],
+  "AWS/Lambda/Web/Usage|EndpointActiveEnvironmentThrottles|FunctionName=lwf-web-pool,EndpointName=main,ExecutionRegion=eu-west-1|Sum": [
+   {
+    "ts": "2026-11-04T10:11:00+01:00",
+    "value": 5319.0
+   }
+  ]
+ }
+}

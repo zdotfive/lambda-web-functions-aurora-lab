@@ -1,0 +1,2 @@
+{"run": "20261104T130327Z_event-proxy_d100_v500_coldspike", "variant": "event-proxy", "vus": 500, "delay_ms": 100, "duration": "2m30s",
+ "mode": "spike", "label": "coldspike", "start": "2026-11-04T13:03:27Z", "end": "2026-11-04T13:05:58Z", "distinct_env_ids": 501}

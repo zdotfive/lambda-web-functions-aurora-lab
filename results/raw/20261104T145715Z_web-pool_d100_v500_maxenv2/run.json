@@ -1,0 +1,2 @@
+{"run": "20261104T145715Z_web-pool_d100_v500_maxenv2", "variant": "web-pool", "vus": 500, "delay_ms": 100, "duration": "3m",
+ "mode": "constant", "label": "maxenv2", "start": "2026-11-04T14:57:15Z", "end": "2026-11-04T15:00:17Z", "distinct_env_ids": 12}
